@@ -4,6 +4,8 @@
  _webView.getSettings().setJavaScriptEnabled(true);
  _webView.getSettings().setDomStorageEnabled(true);
  _webView.getSettings().setJavaScriptEnabled(true);
+ 
+ _webView.loadUrl("https://developer.expofp.com/examples/autumnfair.html");
 ```
 ## JavaScript code invocation
 
