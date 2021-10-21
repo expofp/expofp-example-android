@@ -1,3 +1,6 @@
+This is an example of how you can integrate ExpoFP maps into an android application.
+
+
 ## Configuring WebView
 
 ```java
@@ -8,7 +11,7 @@
 ```
 ## JavaScript code invocation
 
-Calling up the Booth selection function:
+Calling up the booth selection function:
 
 ```java
 _webView.evaluateJavascript("selectBooth('1306')", null);
