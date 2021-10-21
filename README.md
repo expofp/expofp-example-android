@@ -3,7 +3,6 @@
 ```java
  _webView.getSettings().setJavaScriptEnabled(true);
  _webView.getSettings().setDomStorageEnabled(true);
- _webView.getSettings().setJavaScriptEnabled(true);
  
  _webView.loadUrl("https://developer.expofp.com/examples/autumnfair.html");
 ```
@@ -123,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
         _webView.getSettings().setJavaScriptEnabled(true);
         _webView.getSettings().setDomStorageEnabled(true);
-        _webView.getSettings().setJavaScriptEnabled(true);
 
         _webView.addJavascriptInterface(new BoothClickJSInterface(), "onBoothClickHandler");
         _webView.addJavascriptInterface(new FpReadyJSInterface(), "onFpConfiguredHandler");
