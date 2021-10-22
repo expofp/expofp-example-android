@@ -1,4 +1,4 @@
-This is an example of how you can integrate ExpoFP maps into an android application.
+This is an example of how you can integrate ExpoFP maps into an android(Java) application.
 
 
 ## Configuring WebView
