@@ -80,6 +80,34 @@ Register event handler:
 _webView.addJavascriptInterface(new DirectionJSInterface(), "onDirectionHandler");
 ```
 
+## Offline mode
+
+Configuring caching:
+
+```java
+_webView.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
+_webView.getSettings().setAllowFileAccess( true );
+_webView.getSettings().setAppCacheEnabled( true );
+
+if (!isNetworkAvailable()) {
+    _webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
+}
+else {
+    _webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT );
+}
+```
+
+Network status:
+
+```java
+private boolean isNetworkAvailable() {
+    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService( CONNECTIVITY_SERVICE );
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+}
+```
+
+
 ## Code example
 
 ```java
@@ -125,6 +153,17 @@ public class MainActivity extends AppCompatActivity {
 
         _webView.getSettings().setJavaScriptEnabled(true);
         _webView.getSettings().setDomStorageEnabled(true);
+        
+        _webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
+        _webView.getSettings().setAllowFileAccess(true);
+        _webView.getSettings().setAppCacheEnabled(true);
+
+        if (!isNetworkAvailable()) {
+            _webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        }
+        else {
+            _webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        }
 
         _webView.addJavascriptInterface(new BoothClickJSInterface(), "onBoothClickHandler");
         _webView.addJavascriptInterface(new FpReadyJSInterface(), "onFpConfiguredHandler");
@@ -140,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onBuidDirectionClick(View view) {
         _webView.evaluateJavascript("selectRoute('1306', '2206')", null);
+    }
+    
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 ```
