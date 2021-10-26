@@ -2,54 +2,34 @@ package com.example.expofp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 
 class BoothClickJSInterface {
     @JavascriptInterface
     public void postMessage(String boothName) {
-
+        //Some code
     }
 }
 
 class FpReadyJSInterface {
     @JavascriptInterface
     public void postMessage(String message) {
+        //Some code
     }
 }
 
 class DirectionJSInterface {
     @JavascriptInterface
     public void postMessage(String directionJson) {
+        //Some code
     }
 }
 
@@ -66,7 +46,17 @@ public class MainActivity extends AppCompatActivity {
 
         _webView.getSettings().setJavaScriptEnabled(true);
         _webView.getSettings().setDomStorageEnabled(true);
-        _webView.getSettings().setJavaScriptEnabled(true);
+
+        _webView.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
+        _webView.getSettings().setAllowFileAccess( true );
+        _webView.getSettings().setAppCacheEnabled( true );
+
+        if ( !isNetworkAvailable() ) {
+            _webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
+        }
+        else {
+            _webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT );
+        }
 
         _webView.addJavascriptInterface(new BoothClickJSInterface(), "onBoothClickHandler");
         _webView.addJavascriptInterface(new FpReadyJSInterface(), "onFpConfiguredHandler");
@@ -82,5 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onBuidDirectionClick(View view) {
         _webView.evaluateJavascript("selectRoute('1306', '2206')", null);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService( CONNECTIVITY_SERVICE );
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
