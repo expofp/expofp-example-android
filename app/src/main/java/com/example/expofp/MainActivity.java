@@ -1,82 +1,77 @@
 package com.example.expofp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+
+import com.expofp.fplan.BoothSelectedCallback;
+import com.expofp.fplan.FpConfiguredCallback;
+import com.expofp.fplan.FplanView;
+import com.expofp.fplan.Route;
+import com.expofp.fplan.RouteCreatedCallback;
 
 
-class BoothClickJSInterface {
-    @JavascriptInterface
-    public void postMessage(String boothName) {
+class RouteCallback implements RouteCreatedCallback {
+
+    private FplanView _fplanView;
+
+    public RouteCallback(FplanView fplanView){
+        _fplanView = fplanView;
+    }
+
+    @Override
+    public void onRouteCreated(Route route) {
         //Some code
     }
 }
 
-class FpReadyJSInterface {
-    @JavascriptInterface
-    public void postMessage(String message) {
+class BoothCallback implements BoothSelectedCallback {
+
+    private FplanView _fplanView;
+
+    public BoothCallback(FplanView fplanView){
+        _fplanView = fplanView;
+    }
+
+    @Override
+    public void onBoothSelected(String boothName) {
         //Some code
     }
 }
 
-class DirectionJSInterface {
-    @JavascriptInterface
-    public void postMessage(String directionJson) {
+class FpCallback implements FpConfiguredCallback{
+
+    private FplanView _fplanView;
+
+    public FpCallback(FplanView fplanView){
+        _fplanView = fplanView;
+    }
+
+    @Override
+    public void onFpConfigured() {
         //Some code
     }
 }
 
 public class MainActivity extends AppCompatActivity {
 
-    private WebView _webView;
+    private FplanView _fplanView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        _webView = (WebView) findViewById(R.id.webView);
-
-        _webView.getSettings().setJavaScriptEnabled(true);
-        _webView.getSettings().setDomStorageEnabled(true);
-
-        _webView.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
-        _webView.getSettings().setAllowFileAccess( true );
-        _webView.getSettings().setAppCacheEnabled( true );
-
-        if ( !isNetworkAvailable() ) {
-            _webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
-        }
-        else {
-            _webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT );
-        }
-
-        _webView.addJavascriptInterface(new BoothClickJSInterface(), "onBoothClickHandler");
-        _webView.addJavascriptInterface(new FpReadyJSInterface(), "onFpConfiguredHandler");
-        _webView.addJavascriptInterface(new DirectionJSInterface(), "onDirectionHandler");
-
-        _webView.loadUrl("https://developer.expofp.com/examples/autumnfair.html");
+        _fplanView = findViewById(R.id.fplanView);
+        _fplanView.init("https://developer.expofp.com/examples/autumnfair.html", new BoothCallback(_fplanView), new FpCallback(_fplanView), new RouteCallback(_fplanView));
 
     }
 
     public void onSelectBoothClick(View view) {
-        _webView.evaluateJavascript("selectBooth('1306')", null);
+        _fplanView.selectBooth("1306");
     }
 
     public void onBuidDirectionClick(View view) {
-        _webView.evaluateJavascript("selectRoute('1306', '2206')", null);
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService( CONNECTIVITY_SERVICE );
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        _fplanView.buidRoute("1306", "2206", false);
     }
 }
