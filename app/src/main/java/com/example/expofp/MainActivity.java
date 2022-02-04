@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init("https://developer.expofp.com/examples/autumnfair.html", new BoothCallback(_fplanView), new FpCallback(_fplanView), new RouteCallback(_fplanView));
+        _fplanView.init("https://wayfinding.expofp.com", new BoothCallback(_fplanView), new FpCallback(_fplanView), new RouteCallback(_fplanView));
 
     }
 
@@ -72,6 +72,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBuidDirectionClick(View view) {
-        _fplanView.buidRoute("1306", "2206", false);
+        _fplanView.buildRoute("1306", "2206", false);
     }
 }
