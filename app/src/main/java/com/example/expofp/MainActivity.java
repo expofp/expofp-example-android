@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onBoothSelected(String s) {
+            public void onBoothSelected(String boothName) {
 
             }
 
