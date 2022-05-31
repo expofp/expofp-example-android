@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init("https://wayfinding.expofp.com", new FplanEventListener() {
+        _fplanView.init("https://demo.expofp.com", new FplanEventListener() {
             @Override
             public void onFpConfigured() {
 
@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSelectBoothClick(View view) {
-        _fplanView.selectBooth("1306");
+        _fplanView.selectBooth("720");
     }
 
     public void onBuidDirectionClick(View view) {
-        _fplanView.buildRoute("1306", "2206", false);
+        _fplanView.buildRoute("720", "751", false);
     }
 }
