@@ -4,7 +4,7 @@ This is an example of how you can integrate ExpoFP maps into an android(Java) ap
 
 Documentation: https://github.com/expofp/expofp-android-sdk
 
-Code example:
+## Code example
 
 ```java
 package com.example.expofp;
@@ -73,4 +73,6 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-![1111](https://user-images.githubusercontent.com/60826376/171269389-6aca9de6-98a9-481c-9da1-47252e749601.png)
+## Screenshot
+
+<img src="https://user-images.githubusercontent.com/60826376/171269389-6aca9de6-98a9-481c-9da1-47252e749601.png" width=40%>
