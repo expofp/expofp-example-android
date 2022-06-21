@@ -29,7 +29,9 @@ android {
 }
 
 dependencies {
-    implementation 'com.expofp:fplan:1.1.10'
+    implementation 'com.expofp:common:2.0.0'
+    implementation 'com.expofp:crowdconnected:2.0.0'
+    implementation 'com.expofp:fplan:2.0.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
