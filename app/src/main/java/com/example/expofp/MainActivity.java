@@ -10,11 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
+import com.expofp.crowdconnected.CrowdConnectedProvider;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
 import com.expofp.fplan.Settings;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        _fplanView = findViewById(R.id.fplanView);
-
         Activity activity = this;
 
         //noOverlay - Hides the panel with information about exhibitors
         Settings settings = new Settings("https://demo.expofp.com", false)
+                //.withLocationProvider(new CrowdConnectedProvider(activity, "APP_KEY", "TOKEN", "SECRET"), false)
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
@@ -108,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        FplanView fplanView = findViewById(R.id.fplanView);
-        fplanView.init(settings);
-
+        _fplanView = findViewById(R.id.fplanView);
         _fplanView.init(settings);
     }
 }
