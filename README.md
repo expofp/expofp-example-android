@@ -10,14 +10,20 @@ Documentation: https://github.com/expofp/expofp-android-sdk
 package com.example.expofp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import com.expofp.fplan.FplanEventListener;
+
+import com.expofp.common.Location;
+import com.expofp.crowdconnected.CrowdConnectedProvider;
+import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
+import com.expofp.fplan.Settings;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,14 +38,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.action_select_booth) {
             _fplanView.selectBooth("720");
-        }
-        else if(id == R.id.action_build_route){
-            _fplanView.buildRoute("720", "751", false);
-        }
-        else if(id == R.id.action_set_position){
-            _fplanView.setCurrentPosition(22270, 44950);
+        } else if (id == R.id.action_select_exhibitor) {
+            _fplanView.selectExhibitor("ExpoPlatform");
+        } else if (id == R.id.action_build_route) {
+            _fplanView.selectRoute("720", "751", false);
+        } else if (id == R.id.action_set_position) {
+            _fplanView.selectCurrentPosition(new Location(22270, 44950), false);
+        } else if (id == R.id.action_clear) {
+            _fplanView.clear();
         }
 
         return super.onOptionsItemSelected(item);
@@ -50,27 +59,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        _fplanView = findViewById(R.id.fplanView);
+        Activity activity = this;
 
         //noOverlay - Hides the panel with information about exhibitors
-        _fplanView.init("https://demo.expofp.com", false, new FplanEventListener() {
-            @Override
-            public void onFpConfigured() {
+        Settings settings = new Settings("https://demo.expofp.com", false)
+                //.withLocationProvider(new CrowdConnectedProvider(activity, "APP_KEY", "TOKEN", "SECRET"), false)
+                .withEventsListener(new FplanEventsListener() {
+                    @Override
+                    public void onFpConfigured() {
+                    }
 
-            }
+                    @Override
+                    public void onBoothClick(String s) {
+                    }
 
-            @Override
-            public void onBoothSelected(String boothName) {
+                    @Override
+                    public void onDirection(Route route) {
+                    }
+                });
 
-            }
-
-            @Override
-            public void onRouteCreated(Route route) {
-
-            }
-        });
+        _fplanView = findViewById(R.id.fplanView);
+        _fplanView.init(settings);
     }
 }
+
 ```
 
 ## Screenshot
