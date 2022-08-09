@@ -11,13 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
-import com.expofp.common.LocationProvider;
-import com.expofp.crowdconnected.CrowdConnectedProvider;
-import com.expofp.crowdconnected.Mode;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
-import com.expofp.fplan.Settings;
 
 import java.util.Locale;
 
