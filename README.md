@@ -9,6 +9,7 @@ Documentation: https://github.com/expofp/expofp-android-sdk
 ```java
 package com.example.expofp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -19,11 +20,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
-import com.expofp.crowdconnected.CrowdConnectedProvider;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
-import com.expofp.fplan.Settings;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,26 +56,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        _fplanView = findViewById(R.id.fplanView);
+        _fplanView.destroy();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Activity activity = this;
-
         //noOverlay - Hides the panel with information about exhibitors
-        Settings settings = new Settings("https://demo.expofp.com", false)
-                //.withLocationProvider(new CrowdConnectedProvider(activity, "APP_KEY", "TOKEN", "SECRET"), false)
+        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false, false)
+                //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
+                //.withGlobalLocationProvider()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
                     }
 
                     @Override
-                    public void onBoothClick(String s) {
+                    public void onBoothClick(String boothName) {
                     }
 
                     @Override
                     public void onDirection(Route route) {
+                    }
+
+                    @Override
+                    public void onMessageReceived(String message) {
                     }
                 });
 
@@ -82,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         _fplanView.init(settings);
     }
 }
-
 ```
 
 ## Screenshot
