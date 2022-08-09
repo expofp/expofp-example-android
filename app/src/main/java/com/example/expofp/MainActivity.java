@@ -1,5 +1,6 @@
 package com.example.expofp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -10,11 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
+import com.expofp.common.LocationProvider;
 import com.expofp.crowdconnected.CrowdConnectedProvider;
+import com.expofp.crowdconnected.Mode;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
 import com.expofp.fplan.Settings;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +50,35 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showMessage(Activity activity, @Nullable String title, @Nullable String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        if(title != null && !title.equalsIgnoreCase("")){
+            builder.setTitle(title);
+        }
+
+        if(message != null && !message.equalsIgnoreCase("")){
+            builder.setMessage(message);
+        }
+
+        builder.setCancelable(true);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        _fplanView = findViewById(R.id.fplanView);
+        _fplanView.destroy();
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,57 +87,31 @@ public class MainActivity extends AppCompatActivity {
         Activity activity = this;
 
         //noOverlay - Hides the panel with information about exhibitors
-        Settings settings = new Settings("https://demo.expofp.com", false)
-                //.withLocationProvider(new CrowdConnectedProvider(activity, "APP_KEY", "TOKEN", "SECRET"), false)
+        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false, false)
+                //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
+                //.withGlobalLocationProvider()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setMessage("OnFpConfigured Event");
-                        builder.setCancelable(true);
-                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        showMessage(activity, null, "OnFpConfigured Event");
                     }
 
                     @Override
-                    public void onBoothClick(String s) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("OnBoothClick Event");
-                        builder.setMessage("Booth: " + s);
-                        builder.setCancelable(true);
-                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                    public void onBoothClick(String boothName) {
+                        showMessage(activity, "OnBoothClick Event", String.format(Locale.US, "Booth: '%s'", boothName));
                     }
 
                     @Override
                     public void onDirection(Route route) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("OnDirection Event");
-                        builder.setMessage("Distance: " + route.getDistance()
-                                + "; Time:" + route.getTime()
-                                + "; From:" + route.getBoothFrom().getName()
-                                + "; To:" + route.getBoothTo().getName());
-                        builder.setCancelable(true);
-                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        String message = String.format(Locale.US, "Distance: '%s'; Time: '%d'; From: '%s'; To: '%s';",
+                                route.getDistance(), route.getTime(), route.getBoothFrom().getName(),  route.getBoothTo().getName());
+
+                        showMessage(activity, "OnDirection Event", message);
+                    }
+
+                    @Override
+                    public void onMessageReceived(String message) {
+
                     }
                 });
 
