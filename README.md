@@ -2,20 +2,18 @@
 
 This is an example of how you can integrate ExpoFP maps into an android(Java) application.
 
-Documentation: https://github.com/expofp/expofp-android-sdk
+Documentation: https://expofp.github.io/expofp-mobile-sdk/android-sdk/
 
 ## Code example
 
 ```java
 package com.example.expofp;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_select_booth) {
-            _fplanView.selectBooth("720");
+            _fplanView.selectBooth("656");
         } else if (id == R.id.action_select_exhibitor) {
-            _fplanView.selectExhibitor("ExpoPlatform");
+            _fplanView.selectExhibitor("RPMXPO");
         } else if (id == R.id.action_build_route) {
-            _fplanView.selectRoute("720", "751", false);
+            _fplanView.selectRoute("519", "656", false);
         } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(22270, 44950), false);
+            _fplanView.selectCurrentPosition(new Location(null, null, null, null,
+                    38.254623, -85.755180), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
         }
@@ -67,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Activity activity = this;
+
         //noOverlay - Hides the panel with information about exhibitors
         com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false, false)
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
@@ -74,18 +75,25 @@ public class MainActivity extends AppCompatActivity {
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
+                        Log.d("Demo", "[onFpConfigured]");
                     }
 
                     @Override
                     public void onBoothClick(String boothName) {
+                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth: '%s'", boothName));
                     }
 
                     @Override
                     public void onDirection(Route route) {
+                        String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
+                                route.getDistance(), route.getTime(), route.getBoothFrom().getName(),  route.getBoothTo().getName());
+
+                        Log.d("Demo", message);
                     }
 
                     @Override
                     public void onMessageReceived(String message) {
+                        Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
                     }
                 });
 
