@@ -6,6 +6,7 @@ dependencyResolutionManagement {
         jcenter()
         maven { url "https://s01.oss.sonatype.org/content/repositories/releases" }
         maven { url "https://maven2.crowdconnected.net/" }
+        maven { url "https://dl.cloudsmith.io/public/indooratlas/mvn-public/maven/" }
     }
 }
 rootProject.name = "ExpoFP"
