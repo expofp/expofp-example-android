@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="16sp"
+    android:paddingLeft="16sp"
+    android:paddingRight="16sp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/latTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="40sp"
+        android:minWidth="110sp"
+        android:text="Latitude:"
+        android:textSize="18sp"
+        android:textAlignment="textStart"
+        android:layout_marginTop="6sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/latEditText"/>
+    <EditText
+        android:id="@+id/latEditText"
+        android:inputType="number|numberDecimal|numberSigned"
+        android:layout_width="wrap_content"
+        android:minWidth="160sp"
+        android:layout_height="40sp"
+        app:layout_constraintLeft_toRightOf="@+id/latTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:hint="Latitude" />
+    <TextView
+        android:id="@+id/lonTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="40sp"
+        android:minWidth="110sp"
+        android:text="Longitude:"
+        android:textSize="18sp"
+        android:textAlignment="textStart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/latTextView"
+        app:layout_constraintRight_toLeftOf="@+id/lonEditText"/>
+    <EditText
+        android:id="@+id/lonEditText"
+        android:inputType="number|numberDecimal|numberSigned"
+        android:layout_width="wrap_content"
+        android:minWidth="160sp"
+        android:layout_height="40sp"
+        app:layout_constraintLeft_toRightOf="@+id/latTextView"
+        app:layout_constraintTop_toBottomOf="@id/latEditText"
+        app:layout_constraintRight_toRightOf="parent"
+        android:hint="Longitude" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,8 +7,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import com.expofp.common.Location;
 import com.expofp.fplan.FplanEventsListener;
@@ -32,18 +36,153 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_select_booth) {
-            _fplanView.selectBooth("720");
-        } else if (id == R.id.action_select_exhibitor) {
-            _fplanView.selectExhibitor("ExpoPlatform");
-        } else if (id == R.id.action_build_route) {
-            _fplanView.selectRoute("720", "751", false);
-        } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(22270, 44950), false);
-        } else if (id == R.id.action_clear) {
+            selectBooth();
+        }
+        else if (id == R.id.action_select_exhibitor) {
+            selectExhibitor();
+        }
+        else if (id == R.id.action_build_route) {
+            selectRoute();
+        }
+        else if (id == R.id.action_set_position) {
+            selectCurrentPosition();
+        }
+        else if (id == R.id.action_clear) {
             _fplanView.clear();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void selectBooth(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_select_booth, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText boothEditText = (EditText) dialogView.findViewById(R.id.boothEditText);
+        boothEditText.setText("656");
+
+        dialogBuilder.setTitle("Select booth");
+        dialogBuilder.setPositiveButton("Ok", (dialog, whichButton) -> {
+            try {
+                if(boothEditText.getText() != null){
+                    _fplanView.selectBooth(boothEditText.getText().toString());
+                }
+            }
+            catch (Exception ex){
+                Log.e("Demo", ex.toString());
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    private void selectExhibitor(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_select_exhibitor, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText exhibitorEditText = (EditText) dialogView.findViewById(R.id.exhibitorEditText);
+
+        exhibitorEditText.setText("RPMXPO");
+
+        dialogBuilder.setTitle("Select exhibitor");
+        dialogBuilder.setPositiveButton("Ok", (dialog, whichButton) -> {
+            try {
+                if(exhibitorEditText.getText() != null){
+                    _fplanView.selectExhibitor(exhibitorEditText.getText().toString());
+                }
+            }
+            catch (Exception ex){
+                Log.e("Demo", ex.toString());
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    private void selectRoute(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_build_rote, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText fromEditText = (EditText) dialogView.findViewById(R.id.fromEditText);
+        final EditText toEditText = (EditText) dialogView.findViewById(R.id.toEditText);
+
+        fromEditText.setText("519");
+        toEditText.setText("656");
+
+        dialogBuilder.setTitle("Build route");
+        dialogBuilder.setPositiveButton("Ok", (dialog, whichButton) -> {
+            try {
+                if(fromEditText.getText() != null && toEditText.getText() != null) {
+                    _fplanView.selectRoute(fromEditText.getText().toString(),
+                            toEditText.getText().toString(), false);
+                }
+            }
+            catch (Exception ex){
+                Log.e("Demo", ex.toString());
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    private void selectCurrentPosition(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_select_position, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText latEditText = (EditText) dialogView.findViewById(R.id.latEditText);
+        final EditText lonEditText = (EditText) dialogView.findViewById(R.id.lonEditText);
+
+        latEditText.setText("38.254623");
+        lonEditText.setText("-85.755180");
+
+        dialogBuilder.setTitle("Set blue-dot");
+        dialogBuilder.setPositiveButton("Ok", (dialog, whichButton) -> {
+            try {
+                if(latEditText.getText() != null && lonEditText.getText() != null) {
+                    Double lat = Double.parseDouble(latEditText.getText().toString());
+                    Double lon = Double.parseDouble(lonEditText.getText().toString());
+                    _fplanView.selectCurrentPosition(new Location(null, null, null, null,
+                            lat, lon), true);
+                }
+            }
+            catch (Exception ex){
+                Log.e("Demo", ex.toString());
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
     private void showMessage(Activity activity, @Nullable String title, @Nullable String message){
@@ -85,16 +224,16 @@ public class MainActivity extends AppCompatActivity {
         //noOverlay - Hides the panel with information about exhibitors
         com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false, false)
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
-                //.withGlobalLocationProvider()
+                //.withLocationProvider(new GpsProvider(getApplication()))
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
-                        showMessage(activity, null, "OnFpConfigured Event");
+                        Log.d("Demo", "OnFpConfigured event");
                     }
 
                     @Override
                     public void onBoothClick(String boothName) {
-                        showMessage(activity, "OnBoothClick Event", String.format(Locale.US, "Booth: '%s'", boothName));
+                        Log.d("Demo", "OnBoothClick event: " + String.format(Locale.US, "Booth: '%s'", boothName));
                     }
 
                     @Override
@@ -102,12 +241,11 @@ public class MainActivity extends AppCompatActivity {
                         String message = String.format(Locale.US, "Distance: '%s'; Time: '%d'; From: '%s'; To: '%s';",
                                 route.getDistance(), route.getTime(), route.getBoothFrom().getName(),  route.getBoothTo().getName());
 
-                        showMessage(activity, "OnDirection Event", message);
+                        Log.d("Demo", "OnDirection event: " + message);
                     }
 
                     @Override
                     public void onMessageReceived(String message) {
-
                     }
                 });
 

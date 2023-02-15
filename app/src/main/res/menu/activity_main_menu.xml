@@ -5,16 +5,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_select_booth"
-        android:icon="@drawable/ic_booth"
-        android:title="A1"
-        app:iconTint="@color/white"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_select_exhibitor"
-        android:icon="@drawable/ic_exhibitor"
-        android:title="A1"
+        android:id="@+id/action_set_position"
+        android:icon="@drawable/ic_location"
+        android:title="Set position"
         app:iconTint="@color/white"
         app:showAsAction="ifRoom" />
 
@@ -26,9 +19,16 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_set_position"
-        android:icon="@drawable/ic_location"
-        android:title="Set position"
+        android:id="@+id/action_select_booth"
+        android:icon="@drawable/ic_booth"
+        android:title="Select booth"
+        app:iconTint="@color/white"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_select_exhibitor"
+        android:icon="@drawable/ic_exhibitor"
+        android:title="Select exhibitor"
         app:iconTint="@color/white"
         app:showAsAction="ifRoom" />
 
