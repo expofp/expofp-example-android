@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ExpoFP" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.ExpoFP" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#3D91F7</item>
         <item name="colorPrimaryVariant">#F53D91F7</item>
