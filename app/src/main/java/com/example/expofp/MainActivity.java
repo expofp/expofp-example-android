@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
+import com.expofp.fplan.Details;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             _fplanView.selectRoute("519", "656", false);
         } else if (id == R.id.action_set_position) {
             _fplanView.selectCurrentPosition(new Location(null, null, null, null,
-                    38.254623, -85.755180), true);
+                    38.180023, -85.845180), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
         }
@@ -85,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onMessageReceived(String message) {
                         Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
+                    }
+
+                    @Override
+                    public void onDetails(Details details) {
+                        Log.d("Demo", "OnDirection onDetails");
+                        if(details != null) {
+                            Log.d("Demo", "details name=" + details.getName());
+                        }
+                        else{
+                            Log.d("Demo", "details = NULL");
+                        }
+                    }
+
+                    @Override
+                    public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
+                        Log.d("Demo", "onExhibitorCustomButtonClick externalId="+externalId+"; buttonNumber="+buttonNumber+"; buttonUrl="+buttonUrl);
                     }
                 });
 
