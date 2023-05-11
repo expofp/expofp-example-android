@@ -1,5 +1,6 @@
 package com.example.expofp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -71,26 +72,34 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onBoothClick(String boothName) {
-                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth: '%s'", boothName));
+                    public void onBoothClick(@Nullable String id, @Nullable String name) {
+                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", id, name));
                     }
 
                     @Override
-                    public void onDirection(Route route) {
-                        String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
-                                route.getDistance(), route.getTime(), route.getBoothFrom().getName(),  route.getBoothTo().getName());
+                    public void onDirection(@Nullable Route route) {
+                        if(route != null) {
+                            String from = route.getBoothFrom() != null ? route.getBoothFrom().getName() : "null";
+                            String to = route.getBoothTo() != null ? route.getBoothTo().getName() : "null";
 
-                        Log.d("Demo", message);
+                            String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
+                                    route.getDistance(), route.getTime(), from, to);
+
+                            Log.d("Demo", message);
+                        }
+                        else {
+                            Log.d("Demo", "route = NULL");
+                        }
                     }
 
                     @Override
-                    public void onMessageReceived(String message) {
+                    public void onMessageReceived(@Nullable String message) {
                         Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
                     }
 
                     @Override
-                    public void onDetails(Details details) {
-                        Log.d("Demo", "OnDirection onDetails");
+                    public void onDetails(@Nullable Details details) {
+                        Log.d("Demo", "[onDetails]");
                         if(details != null) {
                             Log.d("Demo", "details name=" + details.getName());
                         }
@@ -101,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
-                        Log.d("Demo", "onExhibitorCustomButtonClick externalId="+externalId+"; buttonNumber="+buttonNumber+"; buttonUrl="+buttonUrl);
+                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId="+externalId+"; buttonNumber="+buttonNumber+"; buttonUrl="+buttonUrl);
                     }
                 });
 
