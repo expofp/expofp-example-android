@@ -29,10 +29,10 @@ android {
 }
 
 dependencies {
-    implementation 'com.expofp:common:4.0.1'
-    implementation 'com.expofp:fplan:4.0.1'
-    implementation 'com.expofp:crowdconnected:4.0.1'
-    implementation 'com.expofp:indooratlas:4.0.1'
+    implementation 'com.expofp:common:4.0.2'
+    implementation 'com.expofp:fplan:4.0.2'
+    implementation 'com.expofp:crowdconnected:4.0.2'
+    implementation 'com.expofp:indooratlas:4.0.2'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
