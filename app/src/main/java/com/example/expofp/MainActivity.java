@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Activity activity = this;
 
         //noOverlay - Hides the panel with information about exhibitors
-        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false, false)
+        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com", false)
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
                 //.withGlobalLocationProvider()
                 .withEventsListener(new FplanEventsListener() {
