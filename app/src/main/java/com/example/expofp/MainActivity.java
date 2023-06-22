@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        _fplanView = findViewById(R.id.fplanView);
         _fplanView.destroy();
         super.onDestroy();
     }
