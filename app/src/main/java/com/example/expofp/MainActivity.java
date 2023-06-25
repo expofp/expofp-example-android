@@ -3,19 +3,19 @@ package com.example.expofp;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
-import com.expofp.common.GlobalLocationProvider;
-import com.expofp.crowdconnected.Mode;
 import com.expofp.fplan.Details;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
 import com.expofp.crowdconnected.CrowdConnectedProvider;
+import com.expofp.gpsprovider.GpsProvider;
 import com.expofp.indooratlas.IndoorAtlasProvider;
 
 import java.util.Locale;
@@ -65,11 +65,18 @@ public class MainActivity extends AppCompatActivity {
         com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com")
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
                 //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
+                //.withLocationProvider(new GpsProvider(getApplication()))
                 //.withGlobalLocationProvider()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
                         Log.d("Demo", "[onFpConfigured]");
+                    }
+
+                    @Nullable
+                    @Override
+                    public void onFpConfigureError(int i, String s) {
+                        Log.d("Demo", "[onFpConfigureError] " + s);
                     }
 
                     @Override
@@ -79,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDirection(@Nullable Route route) {
-                        if(route != null) {
+                        if (route != null) {
                             String from = route.getBoothFrom() != null ? route.getBoothFrom().getName() : "null";
                             String to = route.getBoothTo() != null ? route.getBoothTo().getName() : "null";
 
@@ -87,8 +94,7 @@ public class MainActivity extends AppCompatActivity {
                                     route.getDistance(), route.getTime(), from, to);
 
                             Log.d("Demo", message);
-                        }
-                        else {
+                        } else {
                             Log.d("Demo", "route = NULL");
                         }
                     }
@@ -101,17 +107,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDetails(@Nullable Details details) {
                         Log.d("Demo", "[onDetails]");
-                        if(details != null) {
+                        if (details != null) {
                             Log.d("Demo", "details name=" + details.getName());
-                        }
-                        else{
+                        } else {
                             Log.d("Demo", "details = NULL");
                         }
                     }
 
                     @Override
                     public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
-                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId="+externalId+"; buttonNumber="+buttonNumber+"; buttonUrl="+buttonUrl);
+                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId=" + externalId + "; buttonNumber=" + buttonNumber + "; buttonUrl=" + buttonUrl);
                     }
                 });
 
