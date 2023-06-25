@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Nullable
                     @Override
-                    public void onFpConfigureError(int i, String s) {
-                        Log.d("Demo", "[onFpConfigureError] " + s);
+                    public void onFpConfigureError(int errorCode, String description) {
+                        Log.d("Demo", "[onFpConfigureError] " + description);
                     }
 
                     @Override

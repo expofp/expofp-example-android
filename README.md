@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onFpConfigured() {
                     }
 
+                    @Nullable
+                    @Override
+                    public void onFpConfigureError(int errorCode, String description) {
+                    }
+
                     @Override
                     public void onBoothClick(@Nullable String id, @Nullable String name) {
                     }
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         _fplanView.init(settings);
     }
 }
+
 ```
 
 ## Screenshot
