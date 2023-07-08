@@ -35,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_select_booth) {
-            _fplanView.selectBooth("656");
+            _fplanView.selectBooth("305");
         } else if (id == R.id.action_select_exhibitor) {
-            _fplanView.selectExhibitor("RPMXPO");
+            _fplanView.selectExhibitor("Aria Style");
         } else if (id == R.id.action_build_route) {
-            _fplanView.selectRoute("519", "656", false);
+            _fplanView.selectRoute("305", "339", false);
         } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(null, null, null, null,
-                    38.180023, -85.845180), true);
+            _fplanView.selectCurrentPosition(new Location(45000.00, 14000.00, null, null,
+                    null, null), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
         }
