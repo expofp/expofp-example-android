@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings("https://demo.expofp.com")
+        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings()
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
                 //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
                 //.withLocationProvider(new GpsProvider(getApplication()))
@@ -120,6 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init(settings);
+        _fplanView.init("https://demo.expofp.com", settings);
     }
 }
