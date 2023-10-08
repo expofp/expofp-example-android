@@ -15,7 +15,6 @@ import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
 import com.expofp.crowdconnected.CrowdConnectedProvider;
-import com.expofp.gpsprovider.GpsProvider;
 import com.expofp.indooratlas.IndoorAtlasProvider;
 
 import java.util.Locale;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings()
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
                 //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
-                //.withLocationProvider(new GpsProvider(getApplication()))
                 //.withGlobalLocationProvider()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
