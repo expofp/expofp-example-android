@@ -9,13 +9,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.expofp.common.GlobalLocationProvider;
 import com.expofp.common.Location;
+import com.expofp.common.LocationProvider;
+import com.expofp.crowdconnected.Mode;
+import com.expofp.crowdconnected.Settings;
 import com.expofp.fplan.Details;
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
 import com.expofp.fplan.Route;
 import com.expofp.crowdconnected.CrowdConnectedProvider;
-import com.expofp.indooratlas.IndoorAtlasProvider;
 
 import java.util.Locale;
 
@@ -60,64 +63,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        com.expofp.crowdconnected.Settings ccSettings =
+                new Settings("b5397af0","a044661ef49648a5b3f6982716b58272",
+                        "9RD3Bht95Os86IJ3727elX7B64fS23l6", Mode.IPS_AND_GPS);
+        ccSettings.setServiceNotificationInfo("TEST", R.drawable.ic_booth);
+
+        LocationProvider lp = new CrowdConnectedProvider(getApplication(), ccSettings);
+
+        GlobalLocationProvider.init(lp);
+        GlobalLocationProvider.start();
+
         com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings()
-                //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
-                //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
-                //.withGlobalLocationProvider()
-                .withEventsListener(new FplanEventsListener() {
-                    @Override
-                    public void onFpConfigured() {
-                        Log.d("Demo", "[onFpConfigured]");
-                    }
-
-                    @Nullable
-                    @Override
-                    public void onFpConfigureError(int errorCode, String description) {
-                        Log.d("Demo", "[onFpConfigureError] " + description);
-                    }
-
-                    @Override
-                    public void onBoothClick(@Nullable String id, @Nullable String name) {
-                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", id, name));
-                    }
-
-                    @Override
-                    public void onDirection(@Nullable Route route) {
-                        if (route != null) {
-                            String from = route.getBoothFrom() != null ? route.getBoothFrom().getName() : "null";
-                            String to = route.getBoothTo() != null ? route.getBoothTo().getName() : "null";
-
-                            String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
-                                    route.getDistance(), route.getTime(), from, to);
-
-                            Log.d("Demo", message);
-                        } else {
-                            Log.d("Demo", "route = NULL");
-                        }
-                    }
-
-                    @Override
-                    public void onMessageReceived(@Nullable String message) {
-                        Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
-                    }
-
-                    @Override
-                    public void onDetails(@Nullable Details details) {
-                        Log.d("Demo", "[onDetails]");
-                        if (details != null) {
-                            Log.d("Demo", "details name=" + details.getName());
-                        } else {
-                            Log.d("Demo", "details = NULL");
-                        }
-                    }
-
-                    @Override
-                    public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
-                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId=" + externalId + "; buttonNumber=" + buttonNumber + "; buttonUrl=" + buttonUrl);
-                    }
-                });
+                .withGlobalLocationProvider();
 
         _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init("https://demo.expofp.com", settings);
+        _fplanView.init("https://parispackagingweek.expofp.com", settings);
     }
 }
