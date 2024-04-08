@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onBoothClick(@Nullable FloorPlanBoothBase booth) {
                         Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", booth.getId(), booth.getName()));
-
-                        _fplanView.boothsList(floorPlanBooths -> {
-                            Log.i("SS", "dd");
-                        });
                     }
 
                     @Override
