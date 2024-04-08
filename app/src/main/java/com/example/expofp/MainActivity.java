@@ -8,13 +8,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.ValueCallback;
 
 import com.expofp.common.Location;
-import com.expofp.fplan.Details;
+
 import com.expofp.fplan.FplanEventsListener;
 import com.expofp.fplan.FplanView;
-import com.expofp.fplan.Route;
+
 import com.expofp.crowdconnected.CrowdConnectedProvider;
+import com.expofp.fplan.models.Bookmark;
+import com.expofp.fplan.models.Details;
+import com.expofp.fplan.models.FloorPlanBooth;
+import com.expofp.fplan.models.FloorPlanBoothBase;
+import com.expofp.fplan.models.Route;
 import com.expofp.indooratlas.IndoorAtlasProvider;
 
 import java.util.Locale;
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings()
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
                 //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
                 //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
                 //.withGlobalLocationProvider()
@@ -77,8 +83,12 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onBoothClick(@Nullable String id, @Nullable String name) {
-                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", id, name));
+                    public void onBoothClick(@Nullable FloorPlanBoothBase booth) {
+                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", booth.getId(), booth.getName()));
+
+                        _fplanView.boothsList(floorPlanBooths -> {
+                            Log.i("SS", "dd");
+                        });
                     }
 
                     @Override
@@ -109,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Log.d("Demo", "details = NULL");
                         }
+                    }
+
+                    @Override
+                    public void onBookmarkClick(Bookmark bookmark) {
+
                     }
 
                     @Override
