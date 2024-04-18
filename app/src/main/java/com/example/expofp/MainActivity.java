@@ -73,48 +73,27 @@ public class MainActivity extends AppCompatActivity {
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
-                        Log.d("Demo", "[onFpConfigured]");
                     }
 
                     @Nullable
                     @Override
                     public void onFpConfigureError(int errorCode, String description) {
-                        Log.d("Demo", "[onFpConfigureError] " + description);
                     }
 
                     @Override
                     public void onBoothClick(@Nullable FloorPlanBoothBase booth) {
-                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", booth.getId(), booth.getName()));
                     }
 
                     @Override
                     public void onDirection(@Nullable Route route) {
-                        if (route != null) {
-                            String from = route.getBoothFrom() != null ? route.getBoothFrom().getName() : "null";
-                            String to = route.getBoothTo() != null ? route.getBoothTo().getName() : "null";
-
-                            String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
-                                    route.getDistance(), route.getTime(), from, to);
-
-                            Log.d("Demo", message);
-                        } else {
-                            Log.d("Demo", "route = NULL");
-                        }
                     }
 
                     @Override
                     public void onMessageReceived(@Nullable String message) {
-                        Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
                     }
 
                     @Override
                     public void onDetails(@Nullable Details details) {
-                        Log.d("Demo", "[onDetails]");
-                        if (details != null) {
-                            Log.d("Demo", "details name=" + details.getName());
-                        } else {
-                            Log.d("Demo", "details = NULL");
-                        }
                     }
 
                     @Override
@@ -124,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
-                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId=" + externalId + "; buttonNumber=" + buttonNumber + "; buttonUrl=" + buttonUrl);
                     }
                 });
 
