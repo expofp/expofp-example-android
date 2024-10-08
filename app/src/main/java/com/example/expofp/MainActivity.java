@@ -17,6 +17,7 @@ import com.expofp.fplan.FplanView;
 
 import com.expofp.crowdconnected.CrowdConnectedProvider;
 import com.expofp.fplan.models.Bookmark;
+import com.expofp.fplan.models.Category;
 import com.expofp.fplan.models.Details;
 import com.expofp.fplan.models.FloorPlanBooth;
 import com.expofp.fplan.models.FloorPlanBoothBase;
@@ -98,7 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onBookmarkClick(Bookmark bookmark) {
+                    }
 
+                    @Override
+                    public void onCategoryClick(Category category) {
                     }
 
                     @Override
