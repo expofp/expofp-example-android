@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_build_route) {
             _fplanView.selectRoute("305", "339", false);
         } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(45000.00, 14000.00, null, null,
+            _fplanView.selectCurrentPosition(new Location(45000.00, 14000.00, null, false, null,
                     null, null), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
@@ -100,10 +100,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
                     }
+
+                    @Override
+                    public void onCurrentPositionChanged(Location location) {
+
+                    }
                 });
 
 
         _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init("https://demo.expofp.com", settings);
+        _fplanView.load("https://demo.expofp.com", settings);
     }
 }
