@@ -11,27 +11,27 @@ package com.example.expofp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.expofp.common.Location;
-import com.expofp.fplan.Details;
-import com.expofp.fplan.FplanEventsListener;
-import com.expofp.fplan.FplanView;
-import com.expofp.fplan.Route;
-import com.expofp.crowdconnected.CrowdConnectedProvider;
-import com.expofp.gpsprovider.GpsProvider;
-import com.expofp.indooratlas.IndoorAtlasProvider;
+import com.expofp.crowdconnected.Mode;
+import com.expofp.fplan.SharedFplanView;
 
-import java.util.Locale;
+import com.expofp.crowdconnected.CrowdConnectedProvider;
+import com.expofp.fplan.contracts.FplanEventsListener;
+import com.expofp.fplan.models.Bookmark;
+import com.expofp.fplan.models.Category;
+import com.expofp.fplan.models.Details;
+import com.expofp.fplan.models.FloorPlanBoothBase;
+import com.expofp.fplan.models.Route;
+import com.expofp.fplan.models.Settings;
+import com.expofp.indooratlas.IndoorAtlasProvider;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FplanView _fplanView;
+    private SharedFplanView _fplanView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_select_booth) {
-            _fplanView.selectBooth("305");
+            _fplanView.selectBooth("4.1-31");
         } else if (id == R.id.action_select_exhibitor) {
-            _fplanView.selectExhibitor("Aria Style");
+            _fplanView.selectExhibitor("VerdaFuel Systems");
         } else if (id == R.id.action_build_route) {
-            _fplanView.selectRoute("305", "339", false);
+            _fplanView.selectRoute("4.1-37", "4.1-11", false);
         } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(45000.00, 14000.00, null, null,
+            _fplanView.selectCurrentPosition(new Location(9388.00, 9887.00, "1", false, null,
                     null, null), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
@@ -70,70 +70,77 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        com.expofp.fplan.Settings settings = new com.expofp.fplan.Settings()
-                //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET")))
-                //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
-                //.withLocationProvider(new GpsProvider(getApplication()))
-                //.withGlobalLocationProvider()
+        _fplanView = findViewById(R.id.fplanView);
+        load();
+    }
+
+    private void load(){
+        _fplanView.load("https://demo.expofp.com", new Settings());
+    }
+
+    private void loadWithCrowdConnectedProvider(){
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
+                .withLocationProvider(new CrowdConnectedProvider(getApplication(),
+                        new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET", Mode.IPS_AND_GPS)));
+
+        _fplanView.load("https://demo.expofp.com", settings);
+    }
+
+    private void loadWithIndoorAtlasProvider(){
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
+                .withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"));
+
+        _fplanView.load("https://demo.expofp.com", settings);
+    }
+
+    private void loadWithEventsListener(){
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
-                        Log.d("Demo", "[onFpConfigured]");
                     }
 
                     @Nullable
                     @Override
                     public void onFpConfigureError(int errorCode, String description) {
-                        Log.d("Demo", "[onFpConfigureError] " + description);
                     }
 
                     @Override
-                    public void onBoothClick(@Nullable String id, @Nullable String name) {
-                        Log.d("Demo", String.format(Locale.US, "[onBoothClick] booth id: '%s'; booth name: '%s'", id, name));
+                    public void onBoothClick(@Nullable FloorPlanBoothBase booth) {
                     }
 
                     @Override
                     public void onDirection(@Nullable Route route) {
-                        if (route != null) {
-                            String from = route.getBoothFrom() != null ? route.getBoothFrom().getName() : "null";
-                            String to = route.getBoothTo() != null ? route.getBoothTo().getName() : "null";
-
-                            String message = String.format(Locale.US, "[onDirection] distance: '%s'; time: '%d'; from: '%s'; to: '%s';",
-                                    route.getDistance(), route.getTime(), from, to);
-
-                            Log.d("Demo", message);
-                        } else {
-                            Log.d("Demo", "route = NULL");
-                        }
                     }
 
                     @Override
                     public void onMessageReceived(@Nullable String message) {
-                        Log.d("Demo", String.format(Locale.US, "[onMessageReceived] message: '%s'", message));
                     }
 
                     @Override
                     public void onDetails(@Nullable Details details) {
-                        Log.d("Demo", "[onDetails]");
-                        if (details != null) {
-                            Log.d("Demo", "details name=" + details.getName());
-                        } else {
-                            Log.d("Demo", "details = NULL");
-                        }
+                    }
+
+                    @Override
+                    public void onBookmarkClick(Bookmark bookmark) {
+                    }
+
+                    @Override
+                    public void onCategoryClick(Category category) {
                     }
 
                     @Override
                     public void onExhibitorCustomButtonClick(String externalId, int buttonNumber, String buttonUrl) {
-                        Log.d("Demo", "[onExhibitorCustomButtonClick] externalId=" + externalId + "; buttonNumber=" + buttonNumber + "; buttonUrl=" + buttonUrl);
+                    }
+
+                    @Override
+                    public void onCurrentPositionChanged(Location location) {
+
                     }
                 });
 
-        _fplanView = findViewById(R.id.fplanView);
-        _fplanView.init("https://demo.expofp.com", settings);
+        _fplanView.load("https://demo.expofp.com", settings);
     }
 }
+
 ```
-
-## Screenshot
-
-<img src="https://user-images.githubusercontent.com/60826376/171269389-6aca9de6-98a9-481c-9da1-47252e749601.png" width=40%>

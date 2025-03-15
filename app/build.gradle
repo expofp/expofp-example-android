@@ -32,12 +32,10 @@ android {
 }
 
 dependencies {
-    implementation 'com.expofp:common:4.9.4'
-    implementation 'com.expofp:fplan:4.9.4'
-    implementation 'com.expofp:indooratlas:4.9.4'
-    implementation 'com.expofp:crowdconnected:4.9.4'
-
-    //implementation files('D:\\Projects\\Pranas\\expofp-fplan-android\\fplan\\build\\outputs\\aar\\fplan-release.aar')
+    implementation 'com.expofp:common:4.9.6'
+    implementation 'com.expofp:fplan:4.9.6'
+    implementation 'com.expofp:indooratlas:4.9.6'
+    implementation 'com.expofp:crowdconnected:4.9.6'
 
     //implementation("com.google.zxing:core:3.5.3")
     //implementation 'com.journeyapps:zxing-android-embedded:4.3.0'

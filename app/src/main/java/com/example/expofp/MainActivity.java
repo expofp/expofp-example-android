@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.expofp.common.Location;
 import com.expofp.crowdconnected.Mode;
-import com.expofp.fplan.FplanView;
+import com.expofp.fplan.SharedFplanView;
 
 import com.expofp.crowdconnected.CrowdConnectedProvider;
 import com.expofp.fplan.contracts.FplanEventsListener;
@@ -17,11 +17,12 @@ import com.expofp.fplan.models.Category;
 import com.expofp.fplan.models.Details;
 import com.expofp.fplan.models.FloorPlanBoothBase;
 import com.expofp.fplan.models.Route;
+import com.expofp.fplan.models.Settings;
 import com.expofp.indooratlas.IndoorAtlasProvider;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FplanView _fplanView;
+    private SharedFplanView _fplanView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,13 +35,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_select_booth) {
-            _fplanView.selectBooth("305");
+            _fplanView.selectBooth("4.1-31");
         } else if (id == R.id.action_select_exhibitor) {
-            _fplanView.selectExhibitor("Aria Style");
+            _fplanView.selectExhibitor("VerdaFuel Systems");
         } else if (id == R.id.action_build_route) {
-            _fplanView.selectRoute("305", "339", false);
+            _fplanView.selectRoute("4.1-37", "4.1-11", false);
         } else if (id == R.id.action_set_position) {
-            _fplanView.selectCurrentPosition(new Location(45000.00, 14000.00, null, false, null,
+            _fplanView.selectCurrentPosition(new Location(9388.00, 9887.00, "1", false, null,
                     null, null), true);
         } else if (id == R.id.action_clear) {
             _fplanView.clear();
@@ -60,9 +61,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        _fplanView = findViewById(R.id.fplanView);
+        load();
+    }
+
+    private void load(){
+        _fplanView.load("https://demo.expofp.com", new Settings());
+    }
+
+    private void loadWithCrowdConnectedProvider(){
         com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
-                //.withLocationProvider(new CrowdConnectedProvider(getApplication(), new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET", Mode.IPS_AND_GPS)))
-                //.withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"))
+                .withLocationProvider(new CrowdConnectedProvider(getApplication(),
+                        new com.expofp.crowdconnected.Settings("APP_KEY","TOKEN","SECRET", Mode.IPS_AND_GPS)));
+
+        _fplanView.load("https://demo.expofp.com", settings);
+    }
+
+    private void loadWithIndoorAtlasProvider(){
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
+                .withLocationProvider(new IndoorAtlasProvider(getApplication(), "API_KEY", "API_SECRET_KEY"));
+
+        _fplanView.load("https://demo.expofp.com", settings);
+    }
+
+    private void loadWithEventsListener(){
+        com.expofp.fplan.models.Settings settings = new com.expofp.fplan.models.Settings()
                 .withEventsListener(new FplanEventsListener() {
                     @Override
                     public void onFpConfigured() {
@@ -107,8 +130,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
-        _fplanView = findViewById(R.id.fplanView);
         _fplanView.load("https://demo.expofp.com", settings);
     }
 }
